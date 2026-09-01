@@ -1,0 +1,7 @@
+interface:
+  display_name: "递进式项目教学"
+  short_description: "用由浅入深的项目路径学习复杂主题"
+  default_prompt: "Use $stage-proj-teaching to teach me React through a progressive project path."
+
+policy:
+  allow_implicit_invocation: true
