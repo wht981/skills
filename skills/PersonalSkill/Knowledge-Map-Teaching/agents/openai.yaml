@@ -1,7 +1,7 @@
 interface:
   display_name: "知识图谱式学习"
   short_description: "用可展开的知识地图探索复杂主题"
-  default_prompt: "Use $knowledge-map-teaching to create an expandable TypeScript knowledge map."
+  default_prompt: "Use $knowledge-map-teaching to create a recursively expandable Mermaid knowledge map for my topic."
 
 policy:
   allow_implicit_invocation: true
