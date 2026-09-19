@@ -1,0 +1,4 @@
+interface:
+  display_name: "Knowledge Notes"
+  short_description: "Build structured, connected Markdown knowledge notes"
+  default_prompt: "Use $knowledge-notes to turn this topic into a maintainable Markdown knowledge-note system."
