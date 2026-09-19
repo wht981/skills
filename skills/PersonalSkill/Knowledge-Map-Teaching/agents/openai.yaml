@@ -1,7 +1,7 @@
 interface:
-  display_name: "知识图谱式学习"
-  short_description: "用可展开的知识地图探索复杂主题"
-  default_prompt: "Use $knowledge-map-teaching to create a recursively expandable Mermaid knowledge map for my topic."
+  display_name: "Knowledge Map Teaching"
+  short_description: "Interview me, then map a domain's knowledge system"
+  default_prompt: "Use $knowledge-map-teaching to clarify my learning goal and scope before building and saving an expandable knowledge map."
 
 policy:
   allow_implicit_invocation: true

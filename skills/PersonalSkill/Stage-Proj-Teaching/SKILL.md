@@ -1,70 +1,103 @@
 ---
 name: stage-proj-teaching
-description: 将一个完整项目重构为一组从简单到完整、各自可运行的阶段目录。优先从开源项目提炼演进，也可构建完整参考项目，不适用于只讲解概念或单次代码问答。
+description: Turn a user-selected learning scope into runnable project stages that grow from minimal to complete. For broad topics, select capabilities through a knowledge map first, then derive the staged path from an open-source project or a complete reference project. Do not use for concept-only explanations or one-off coding questions.
 metadata:
-  short-description: 用递进项目目录学习复杂主题
+  short-description: Learn complex topics through staged project directories
 ---
 
-# 递进项目目录教学
+# Staged Project Teaching
 
-把一个完整项目组织成一组可运行的文件阶段。学习者从最小的 `Stage-One/` 开始，每次进入下一个目录都会看到同一个项目如何多长出一层真实能力，直到 `Final-Project/` 成为完整实现。
+Organize one complete project as a sequence of runnable directory snapshots. The learner starts with a minimal `Stage-One/`. Each later directory shows how the same project gains another real capability until `Final-Project/` becomes the complete implementation.
 
-阶段是目录中的项目快照，不是 Git 提交，也不是只包含差异的补丁。每个阶段都应可以独立打开、运行和检查；后续阶段在前一阶段的基础上增长，而不是换成无关的示例。
+A stage is a project snapshot stored in a directory, not a Git commit or a patch containing only differences. Every stage opens, runs, and can be checked independently. Each later stage grows from the previous design instead of switching to an unrelated example.
 
-## 确定完整终点
+## Scope the learning target first
 
-优先使用用户指定的开源项目作为完整终点，或根据学习目标推荐历史、架构和许可证都适合教学重构的开源项目。研究它的代码、历史、文档和发布资料，以辨认真实的能力增长与取舍。
+First decide whether the request already defines a projectable target or still names a broad domain that needs decomposition. Proceed directly to endpoint design when the user has specified a reference project, described a concrete final product with its core capabilities, or selected nodes from a knowledge map. Otherwise, complete scope selection first.
 
-若合适的开源项目不存在，或用户明确希望如此，也可以先构建一个完整、可信的参考项目，再逆向拆解成阶段。必须在根目录中明确标注终点是 `开源项目重构` 还是 `原创参考项目`。不要把原创设计伪装成开源项目历史，也不要把教学改编说成原项目的逐字历史。
+Call `$knowledge-map-teaching` when the topic contains several independently useful branches, does not naturally converge on one coherent project, or would lose teaching focus if a single implementation tried to cover the whole domain. Have it present the root map, then let the user select, exclude, or further expand nodes. If the user already has a knowledge map, select from it instead of creating another one. Follow that skill's default persistence contract, and keep its knowledge-map directory separate from the staged project root.
 
-使用开源项目时，确认许可证、归属和再分发要求。教学阶段优先以最小实现表达其结构；若最终阶段包含或改编了原项目代码，保留必需的许可证和归属说明。
+Turn the selected nodes into a scope contract. Preserve the learning-target name confirmed by the user, and record the selected nodes, prerequisites needed to implement them, capabilities the project must demonstrate, and adjacent material explicitly excluded. Map nodes select the scope but do not become project stages directly. Translate them into capabilities that a project can demonstrate and verify, then design how those capabilities grow. Mark nodes that cannot be verified through the project as background knowledge or exclusions rather than inventing stages for them.
 
-## 设计阶段路径
+Scope selection is complete only when one complete project can demonstrate the chosen capabilities coherently, the endpoint can be stated in one sentence, and the exclusions are clear. If the selected nodes require unrelated project forms, recommend narrowing the scope or splitting it into independent staged project paths. When the user explicitly delegates scope selection, state the recommended scope and its tradeoffs before continuing. Otherwise, wait for the user to confirm the scope before producing a stage outline or files.
 
-从完整终点逆向识别它赖以成立的最小能力，再把这些能力排成一条连续增长路径。`Stage-One/` 只保留能让用户运行并理解核心问题的最小版本。每个后续阶段只增加为解决前一阶段限制所必需的能力，例如状态、数据模型、模块边界、持久化、测试、性能、部署或并发。
+## Choose the complete endpoint
 
-不要按文件数量、功能清单或原仓库提交数量机械切分。省略支线功能、合并微小变更和简化实现是允许的，只要阶段之间的因果关系仍然清楚。对开源来源，把可证实的项目事实、教学改编和未知动机分开说明。
+Prefer an open-source project selected by the user as the complete endpoint. Otherwise, recommend an open-source project whose history, architecture, and license suit a teaching reconstruction. Study its code, history, documentation, and release material to identify real capability growth and tradeoffs.
 
-每个阶段都必须写明：
+Distinguish these endpoint modes before acquiring or generating project files:
 
-- 当前项目能做什么，以及如何运行和验证。
-- 前一阶段的限制，或第一阶段试图解决的核心问题。
-- 本阶段新增或改动的内容。
-- 新能力为何需要这样一种结构或取舍。
-- 下一阶段将面对的限制。
-- 开源来源时的证据链接或定位，以及教学改编说明。
+- **Curated-source endpoint:** Use this by default when the user selects an open-source project as the final project for learning. `Final-Project/` remains that project's implementation and architecture at a recorded revision, while repository material unrelated to the learning scope may be removed and teaching annotations may be added. It is a curated copy of the selected project, not a new implementation based on it.
+- **Exact-source endpoint:** Use this when the user explicitly wants the selected revision unchanged. `Final-Project/` contains the unmodified source tree, and all teaching material stays outside it.
+- **Teaching adaptation:** Use this only when the user explicitly wants the core implementation reduced, modified, or reimplemented. State what differs from the source project and why, and do not present the adaptation as the selected project itself.
+- **Original reference project:** Use this when no suitable open-source project exists or the user explicitly requests an original endpoint.
 
-## 目录结构
+If the user selects a repository as the final project without requesting exact preservation, use the curated-source endpoint and state that choice before changing files. Ask only when the requested cleanup would remove learning-relevant functionality, alter core behavior, or create uncertainty about license obligations. Selecting a repository for study does not authorize changing its role from final project to external reference or reimplementing its core.
 
-用户确认输出位置、要学习的内容和阶段大纲后，创建下面的独立教学项目。先从用户请求中提取学习对象，将它规范化为简短、可用于文件系统的名称，再与 `Stage-Proj-Teaching` 组合成一个根目录名。不使用参考项目名称、最终产物名称或代理自行推断的更窄主题替代用户表达的学习对象，也不创建两层父子目录。运行时生成的所有项目文件都放在这个组合名称的根目录下。
+If no suitable open-source project exists, or if the user explicitly prefers an original endpoint, first build a complete and credible reference project and then decompose it backward into stages. Record the chosen mode in `Source-Notes.md` as `curated-source endpoint`, `exact-source endpoint`, `teaching adaptation`, or `original reference project`. Keep original design distinct from open-source history, and describe curation and teaching adaptations rather than presenting them as the project's literal past.
+
+When using an open-source project, verify its license, attribution, and redistribution requirements before pruning or modifying it. Preserve required license, copyright, attribution, notice, and third-party-license material even when it is not part of the learning path. Intermediate stages may use minimal teaching implementations that express the source structure. A curated endpoint documents every removal and addition, an exact-source endpoint remains unchanged, and a teaching adaptation documents every material implementation difference.
+
+## Design the staged path
+
+Work backward from the complete endpoint to identify the minimum capabilities that make it possible, then arrange them into one continuous growth path. `Stage-One/` contains the smallest runnable version that exposes the core problem. Each later stage adds only the capabilities needed to overcome the previous stage's limitation, such as state, data modeling, module boundaries, persistence, testing, performance, deployment, or concurrency.
+
+Derive stages from capability growth rather than file counts, feature-list chunks, or the number of commits in the source repository. Side features may be omitted, small changes may be combined, and implementations may be simplified when the causal relationship between stages remains clear. For open-source sources, distinguish verifiable project facts, teaching adaptations, and unknown motivations.
+
+Every stage states:
+
+- What the current project can do, and how to run and verify it.
+- The previous stage's limitation, or the core problem addressed by the first stage.
+- What this stage adds or changes.
+- Why the new capability requires this structure or tradeoff.
+- The limitation that motivates the next stage.
+- For open-source sources, evidence links or locations and an explanation of teaching adaptations.
+
+## Make every stage teachable
+
+Treat learning material as part of the project, not as optional commentary after the code works. Before generating stage files, read [Teaching Artifact Standard](./references/teaching-artifact-standard.md). Apply it to the root guide, every intermediate stage, and the final-project guide.
+
+Write intermediate-stage code for a learner to inspect. Add concise comments around the mechanism introduced by that stage, non-obvious control or data flow, invariants, architectural boundaries, intentional limitations, and tradeoffs. Prefer expressive names and clear structure for ordinary code. Comments explain why the design exists and how its important parts cooperate rather than translating syntax line by line.
+
+A stage is complete only when it runs independently, its verification instructions have been checked, its learning-critical code is intelligible with the supplied comments, and its README gives the learner an ordered path through the stage. Working code without the corresponding learning guide is incomplete.
+
+## Directory structure
+
+Create the standalone teaching project below after the user confirms the output location, scope contract, endpoint mode, and stage outline. Normalize the user-confirmed learning-target name into a short filesystem-safe form, then combine it with `Stage-Proj-Teaching` as one root directory name. Preserve the confirmed learning target instead of substituting the reference project name, final product name, or an unconfirmed inferred topic. Keep all persistent artifacts for this teaching project inside this single root directory, including acquired open-source source trees. Do not leave a persistent source checkout beside the teaching-project directory.
 
 ```text
 Stage-Proj-Teaching-<learning-target>/
 ├── README.md
-├── Source-Notes.md             # 开源来源或原创模式说明
+├── Source-Notes.md             # Source, revision, and endpoint mode
+├── Final-Project-Guide.md      # Exact-source mode learning guide
 ├── Stage-One/
 │   ├── README.md
-│   └── <可运行的最小项目文件>
+│   └── <runnable minimal project files>
 ├── Stage-Two/
 │   ├── README.md
-│   └── <在 Stage One 上增长后的完整快照>
+│   └── <complete snapshot grown from Stage One>
 ├── Stage-Three/
 │   └── ...
 └── Final-Project/
     ├── README.md
-    └── <完整项目文件>
+    ├── LEARNING-GUIDE.md      # Curated-source mode guide
+    └── <complete project files>
 ```
 
-组合目录名必须直接对应用户表述的学习内容，并保持简短稳定。被选中的开源项目或原创参考项目只决定阶段内容和最终实现，其名称与来源记录在 `Source-Notes.md`，不决定根目录名称。根目录 `README.md` 负责阶段导航、先修条件和每个阶段的简短价值。阶段编号或名称必须按顺序稳定，`Final-Project/` 是最终可运行终点。
+The combined directory name directly represents the confirmed learning target and remains short and stable. Selected knowledge-map nodes define the capability scope but are not concatenated into the directory name. The open-source project or original reference project determines stage content and the final implementation, while its name and provenance belong in `Source-Notes.md`. The root `README.md` records the scope contract, stage navigation, prerequisites, and the value of each stage. Keep stage numbers or names stable and ordered. `Final-Project/` is the complete runnable endpoint.
 
-不要修改源开源仓库。每个阶段目录是教学快照，不应依赖另一个阶段目录中的代码才能运行。创建后运行或以适当方式验证每个阶段，确保最终项目可用不掩盖中间阶段的损坏。
+For a curated-source or exact-source endpoint, resolve the teaching-project root before acquiring the repository. Materialize the selected revision directly as `Final-Project/`, without wrapping it in another directory and without creating a separate derivative final implementation. Avoid embedding a nested Git repository when the teaching-project root is itself version-controlled. Prefer a release archive or export a temporary checkout at the pinned revision, and record the repository URL and exact revision in `Source-Notes.md`. Temporary acquisition data is not part of the teaching workspace and must not become a persistent sibling directory.
 
-## 带领学习者
+In curated-source mode, audit the source tree before removing anything. Keep files required for the selected capabilities, build, runtime, tests, comprehension, provenance, and legal compliance. Remove repository operations or out-of-scope material only after checking that retained files do not depend on it. Add teaching comments and guides without obscuring the original architecture, and record the curation in `Source-Notes.md`. In exact-source mode, leave `Final-Project/` unchanged and put teaching commentary in `Final-Project-Guide.md`.
 
-从 `Stage-One/` 开始，一次只推进一个阶段。让用户运行当前目录、理解当前能力与限制，再比较下一目录中为了突破该限制而增加的内容。不要跳过中间阶段直接讲最终架构。
+Intermediate stage directories are teaching reconstructions and may simplify the implementation while preserving the causal path toward the endpoint. Each stage runs without importing code from another stage directory or from `Final-Project/`. Run or otherwise validate every stage after creation so a working final project cannot hide broken intermediate stages.
 
-用户可以在某个阶段停下、修改或扩展它。把这类探索保留在该阶段或明确的新分支目录中，不要混进后续教学快照。若用户要求查看完整项目，`Final-Project/` 始终是参考终点，而不是起点。
+## Guide the learner
 
-## 边界
+Start with `Stage-One/` and advance one stage at a time. Have the user run the current directory and understand its capability and limitation before comparing the additions that overcome that limitation in the next directory. Keep the intermediate stages visible instead of jumping directly to the final architecture.
 
-本技能产出的是一条项目递进路径。若用户只需要领域知识的树状结构，先建立知识地图。若用户只想阅读某个开源仓库的提交历史，做历史分析而不是生成 staged project。
+The user may pause at, modify, or extend a stage. Keep that exploration within the stage or in an explicitly named branch directory rather than mixing it into later teaching snapshots. If the user asks to inspect the complete project, treat `Final-Project/` as the reference endpoint rather than the starting point.
+
+## Boundaries
+
+This skill produces a progressive project path. The knowledge map selects a scope within a broad domain but does not replace stage design. Stop after the knowledge map when the user only needs domain structure. When the user only wants to inspect an open-source repository's commit history, perform historical analysis instead of generating a staged project.

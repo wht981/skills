@@ -1,7 +1,7 @@
 interface:
-  display_name: "开源项目演进教学"
-  short_description: "用阶段目录逐步构建完整项目"
-  default_prompt: "Use $stage-proj-teaching to create staged project folders for learning a complete application."
+  display_name: "Staged Project Teaching"
+  short_description: "Turn a learning scope into runnable project stages"
+  default_prompt: "Use $stage-proj-teaching to scope my learning goal and turn it into staged project folders."
 
 policy:
   allow_implicit_invocation: true
