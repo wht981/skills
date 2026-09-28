@@ -1,0 +1,4 @@
+interface:
+  display_name: "Douyin / Bilibili to Notes"
+  short_description: "Extract Douyin and Bilibili content into structured Obsidian notes"
+  default_prompt: "Use $douyin-obsidian to turn this Douyin or Bilibili link into a structured note in Obsidian Clippings."

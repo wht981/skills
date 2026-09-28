@@ -1,0 +1,21 @@
+# 运行时生成的文件
+__pycache__/
+*.pyc
+*.pyo
+
+# Python 虚拟环境（体积大，不提交）
+.venv/
+venv/
+
+# 本地配置文件（含 API 密钥，绝对不要提交）
+.env
+.douyin-video/
+
+# 临时目录
+tmp*/
+.tmp/
+output/
+
+# 系统文件
+.DS_Store
+Thumbs.db
